@@ -56,7 +56,15 @@ body {
   transition: opacity 0.2s ease;
 }
 
-.site-brand { margin-left: auto; padding: 12px 0; letter-spacing: 0.06em; }
+.site-brand {
+  margin-left: auto;
+  padding: 10px 16px;
+  letter-spacing: 0.06em;
+  background: rgba(51, 20, 52, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+}
+.site-brand[hidden] { display: none; }
 .return-button { width: 44px; height: 44px; display: grid; place-items: center; }
 .return-button svg { filter: drop-shadow(0 1px 3px rgba(51, 20, 52, 0.35)); }
 .return-button[hidden] { display: none; }

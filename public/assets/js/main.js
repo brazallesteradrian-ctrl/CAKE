@@ -556,6 +556,7 @@ const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const selectBtn = document.getElementById("selectBtn");
 const returnBtn = document.getElementById("returnBtn");
+const siteBrand = document.querySelector(".site-brand");
 let selectionTimeline = null;
 history.replaceState({ ...history.state, cakeView: 'selection' }, '');
 
@@ -568,6 +569,7 @@ function returnToSelection() {
   scrollVelocity = 0;
   touchLastX = touchLastY = null;
   returnBtn.hidden = true;
+  siteBrand.hidden = false;
   birthdayBanner.classList.add('hidden');
   spinHint.classList.add('hidden');
   cakeInfo.classList.remove('hidden');
@@ -613,6 +615,7 @@ function selectCake(recordHistory = true) {
   isTransitioning = true;
   if (recordHistory) history.pushState({ cakeView: 'selected', cakeIndex: currentModelIndex }, '');
   returnBtn.hidden = false;
+  siteBrand.hidden = true;
   const config = modelsConfig[currentModelIndex];
   const galleryPreset = getGalleryScalePreset();
   const endX = 0;
