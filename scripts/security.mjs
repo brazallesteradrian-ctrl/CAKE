@@ -14,7 +14,7 @@ export async function prepareSecurity() {
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: blob: https://api.dicebear.com",
+    "img-src 'self' data: blob:",
     // GLTFLoader uses ImageBitmapLoader.fetch(blobURL) for embedded GLB textures.
     "connect-src 'self' blob: https://www.gstatic.com/draco/versioned/decoders/1.5.6/",
     "worker-src 'self' blob:",

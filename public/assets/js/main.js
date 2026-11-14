@@ -567,7 +567,6 @@ function returnToSelection() {
   isTransitioning = false;
   scrollVelocity = 0;
   touchLastX = touchLastY = null;
-  if (!modal.classList.contains('hidden')) btnClose.click();
   returnBtn.hidden = true;
   birthdayBanner.classList.add('hidden');
   spinHint.classList.add('hidden');
@@ -716,74 +715,7 @@ function selectCake(recordHistory = true) {
   }, 0.4);
 }
 selectBtn.onclick = () => selectCake();
-// --- Memory Card Interaction (Modal) ---
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-let selectedFrame = null;
-const modal = document.getElementById("memoryModal");
-const modalImg = document.getElementById("modalImage");
-const modalTitle = document.getElementById("modalTitle");
-const modalLetter = document.getElementById("modalLetter");
-const btnClose = document.querySelector(".modal-close");
-function openModal(frame) {
-  modalImg.src = frame.userData.imageUrl;
-  modalImg.alt = frame.userData.imageAlt;
-  modalTitle.value = frame.userData.title || "";
-  modalLetter.value = frame.userData.letter || "";
-  modal.classList.remove("hidden");
-}
-btnClose.addEventListener("click", () => {
-  modal.classList.add("hidden");
-  if (selectedFrame) {
-    selectedFrame.userData.title = modalTitle.value.trim();
-    selectedFrame.userData.letter = modalLetter.value.trim();
-  }
-});
-viewer.addEventListener("pointerdown", (e) => {
-  if (!galleryRevealed) return;
-  const rect = viewer.getBoundingClientRect();
-  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(frames, true);
-  if (intersects.length > 0) {
-    let obj = intersects[0].object;
-    while (obj && !obj.userData.materials) {
-      obj = obj.parent;
-    }
-    if (obj) {
-      selectedFrame = obj;
-      openModal(selectedFrame);
-    }
-  }
-});
-// --- Hover Cursor for Frames ---
-const coarsePointer = window.matchMedia("(pointer: coarse)");
-let lastHoverTime = 0;
-viewer.addEventListener("pointermove", (e) => {
-  // Skip expensive hover-raycast on coarse pointers (touch devices).
-  if (coarsePointer.matches) {
-    viewer.style.cursor = "default";
-    return;
-  }
-  if (!interactionsEnabled || !galleryRevealed) {
-    viewer.style.cursor = "default";
-    return;
-  }
-  const now = performance.now();
-  if (now - lastHoverTime < 50) return;
-  lastHoverTime = now;
-  const rect = viewer.getBoundingClientRect();
-  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(frames, true);
-  if (intersects.length > 0) {
-    viewer.style.cursor = "pointer";
-  } else {
-    viewer.style.cursor = "default";
-  }
-});
+// Frames are display-only; wheel and swipe still rotate the gallery.
 let activeFrame = frames[0];
 // --- Mobile perf constants ---
 const _isMobile = isMobileDevice();
@@ -794,7 +726,7 @@ let lastRenderTime = null;
 // --- Main Loop ---
 function tick(now) {
   requestAnimationFrame(tick);
-  if (document.hidden || !modal.classList.contains("hidden")) {
+  if (document.hidden) {
     lastRenderTime = null;
     return;
   }

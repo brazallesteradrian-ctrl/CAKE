@@ -20,8 +20,9 @@ dist/                   Generated deployment output (ignored by Git)
 `experiments/` is preserved for development and is excluded from deployment.
 `FRUITCC.glb` and unused images are preserved. All five gallery frames use
 fixed local photos configured in `galleryPhotos` in `public/assets/js/main.js`.
-The same photos load on desktop, tablet, and mobile. Clicking a frame opens
-its full photo and message; photo uploading is disabled.
+The same photos load on desktop, tablet, and mobile. Frames are display-only,
+with no click actions, modal, or upload controls. Wheel and swipe rotate the
+gallery. The back arrow returns to cake selection and supports browser history.
 
 ## Build and deploy
 
@@ -40,9 +41,7 @@ static server. Opening the HTML directly with `file://` can block ES modules
 and model loading. Asset URLs support hosting under a subdirectory.
 
 The site uses external services for Three.js, GSAP, Draco decoding, Google
-Fonts, and avatar artwork, so an internet connection is required. Gallery
-photos are bundled locally. Edited messages currently live only in browser
-memory and reset when the page reloads.
+Fonts, so an internet connection is required. Gallery photos are bundled locally.
 
 ## Security
 
