@@ -98,11 +98,11 @@ scene.add(cakeGroup);
 const heartGalleryGroup = new THREE.Group();
 const frames = [];
 const galleryPhotos = [
-  { file: "art1.webp", alt: "Pencil sketch of a woman reading" },
-  { file: "SUNSET.webp", alt: "Golden sunset over the ocean" },
-  { file: "cat.webp", alt: "Playful cat with a tiny boxing glove" },
-  { file: "spidey.webp", alt: "Spider-Man pixel artwork" },
-  { file: "ascend.webp", alt: "Colorful iridescent portrait" }
+  { file: "art2.webp", alt: "Painting of a person in a flower meadow" },
+  { file: "art5.webp", alt: "Painting of a woman dancing in a golden field" },
+  { file: "art6.webp", alt: "Black cat swimming among water lilies" },
+  { file: "la.webp", alt: "Sunflower artwork with floating bees and clouds" },
+  { file: "meoww.webp", alt: "Pixel cat with heart-shaped highlights in its eyes" }
 ];
 const textureLoader = new THREE.TextureLoader();
 const curvePoints = [
