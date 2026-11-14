@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xWsO4ssJz3jm8Y6kxGaTa8rrR7q0FfKYKGyx4tDWo6E=' 'wasm-unsafe-eval' https://cdn.jsdelivr.net/npm/three@0.160.0/ https://cdn.jsdelivr.net/npm/gsap@3.12.5/ https://www.gstatic.com/draco/versioned/decoders/1.5.6/; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://api.dicebear.com; connect-src 'self' blob: https://www.gstatic.com/draco/versioned/decoders/1.5.6/; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sweet Celebration â€” 3D Cake</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@700&family=Fredoka+One&family=Inter:wght@300;400&family=K2D:wght@400&family=Michroma&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+
+<body>
+  <!-- Premium Loading Screen -->
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="loader-content">
+      <div class="loader-logo">✨</div>
+      <div class="loader-bar-container">
+        <div id="loader-progress" class="loader-progress"></div>
+      </div>
+      <p id="loader-status" class="loader-status">Pre-heating the oven...</p>
+      <p class="loader-percentage">0%</p>
+    </div>
+  </div>
+  <div class="pink-bg">
+    <div class="vector-shadow-wrapper">
+      <div class="vector-1"></div>
+    </div>
+
+    <main class="stage">
+      <div id="viewer" class="viewer" aria-label="3D cake model"></div>
+      <button id="prevBtn" class="btn-nav btn-prev">&lt;</button>
+      <button id="nextBtn" class="btn-nav btn-next">&gt;</button>
+      <button id="selectBtn" class="btn-select">SELECT CAKE</button>
+      <p id="scrollHint" class="hint hidden">Scroll to spin</p>
+
+      <div id="cakeInfo" class="cake-info">
+        <p class="cake-label">NOW SERVING</p>
+        <h1 class="cake-name">
+          <span id="cakeWord1" class="cake-word gradient-word">STRAW<br>BERRY</span><br>
+          <span id="cakeWord2" class="cake-word plain-word">
+            <svg id="cakeSvg" class="cake-svg-text" viewBox="0 0 1150 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+             
+                <linearGradient id="candyGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ff9a9e" />
+                  <stop offset="50%" stop-color="#fad0c4" />
+                  <stop offset="100%" stop-color="#ff9a9e" />
+                </linearGradient>
+                <linearGradient id="frostingGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f9a8d4" id="svgFrostTop" />
+                  <stop offset="100%" stop-color="#ec4899" id="svgFrostBot" />
+                </linearGradient>
+                <clipPath id="cakeLetterClip">
+                  <text x="575" y="240" font-family="'Fredoka One', cursive" font-size="280" text-anchor="middle"
+                    letter-spacing="10">CANDY</text>
+                </clipPath>
+              </defs>
+              <rect x="0" y="0" width="1400" height="320" fill="url(#candyGrad)" clip-path="url(#cakeLetterClip)" />
+              <rect x="0" y="0" width="1400" height="110" fill="url(#frostingGrad)" clip-path="url(#cakeLetterClip)" />
+              <g clip-path="url(#cakeLetterClip)" fill="url(#frostingGrad)">
+                <ellipse cx="120" cy="120" rx="22" ry="35" />
+                <ellipse cx="180" cy="115" rx="18" ry="28" />
+                <ellipse cx="380" cy="122" rx="20" ry="32" />
+                <ellipse cx="440" cy="112" rx="16" ry="26" />
+                <ellipse cx="680" cy="125" rx="22" ry="35" />
+                <ellipse cx="740" cy="118" rx="18" ry="28" />
+                <ellipse cx="980" cy="124" rx="20" ry="32" />
+                <ellipse cx="1040" cy="114" rx="16" ry="26" />
+              </g>
+              <g clip-path="url(#cakeLetterClip)">
+                <rect x="100" y="150" width="8" height="22" rx="4" fill="#FF1493" transform="rotate(30 104 161)" />
+                <rect x="250" y="200" width="8" height="22" rx="4" fill="#00CED1" transform="rotate(-25 254 211)" />
+                <rect x="420" y="140" width="8" height="22" rx="4" fill="#FFD700" transform="rotate(45 424 151)" />
+                <rect x="600" y="220" width="8" height="22" rx="4" fill="#ADFF2F" transform="rotate(-15 604 231)" />
+                <rect x="800" y="160" width="8" height="22" rx="4" fill="#FF4500" transform="rotate(20 804 171)" />
+                <rect x="950" y="210" width="8" height="22" rx="4" fill="#9400D3" transform="rotate(-40 954 221)" />
+                <rect x="1100" y="155" width="8" height="22" rx="4" fill="#FF69B4" transform="rotate(10 1104 166)" />
+                <rect x="1250" y="230" width="8" height="22" rx="4" fill="#00FF7F" transform="rotate(-30 1254 241)" />
+              </g>
+              <!-- LAYER 6: Stroke outline -->
+              <text x="575" y="240" font-family="'Fredoka One', cursive" font-size="280" text-anchor="middle"
+                letter-spacing="10" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="12"
+                paint-order="stroke fill" class="svg-text-shadow">CANDY</text>
+            </svg>
+          </span>
+        </h1>
+        <p id="cakeTagline" class="cake-tagline">Fresh berries &amp; sweet cream,<br>made with all the love. ðŸ“</p>
+      </div>
+
+      <!-- Curved Happy Birthday text (hidden until cake is selected) -->
+      <div id="birthdayBanner" class="birthday-banner hidden">
+        <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="arcPath" d="M 60,140 Q 350,10 640,140" />
+          </defs>
+          <text class="bday-text">
+            <textPath href="#arcPath" startOffset="50%" text-anchor="middle">
+              âœ¨ HAPPY BIRTHDAY âœ¨
+            </textPath>
+          </text>
+        </svg>
+      </div>
+    </main>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js"
+      }
+    }
+  </script>
+  <script type="module" src="./assets/js/main.js"></script>
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
+        <path
+          d="M0,0.2 C0.05,0.15 0.1,0.05 0.15,0.05 C0.25,0.05 0.3,0.25 0.4,0.25 C0.5,0.25 0.55,0.05 0.65,0.05 C0.75,0.05 0.8,0.25 0.9,0.25 C0.95,0.25 1,0.2 1,0.15 L1,1 L0,1 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+  <div id="memoryModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button class="modal-close">&times;</button>
+      <div class="modal-left">
+        <img id="modalImage" src="" alt="Memory Image" />
+      </div>
+      <div class="modal-right">
+        <div class="modal-header">
+          <input type="text" id="modalTitle" class="modal-title-input" placeholder="Title" maxlength="120" />
+        </div>
+
+        <div class="modal-content">
+          <textarea id="modalLetter" class="letter-text" placeholder="Message" maxlength="5000"></textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

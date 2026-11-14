@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>Verlet Physics Rope</title>
+</head><body>
+<div id="container">
+  <canvas id="canvas" width="800" height="480"></canvas>
+  <p>Verlet Physics Rope (move the mouse!) <a href=https://github.com/code4fukui/physics-rope/>src on GitHub</a> forked <a href=https://codepen.io/guerrillacontra/pen/XPZeww>Physics Rope</a></p>
+</div>
+
+<style>
+body {
+  background-color: #1A1B1F;
+}
+
+#container {
+  max-width: 800px;
+  height: 480px;
+  background-color:black;
+  margin: 0 auto;
+  -webkit-box-sizing: border-box;
+  border-style: solid;
+  border-color: white;
+}
+
+#container p {
+  color: white;
+  margin-left: 25px;
+}
+a {
+  color: gray !important;
+}
+</style>
+
+<script type="module">
+import { App } from "./App.js";
+import { Rope } from "./Rope.js";
+
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+
+const gradient = context.createLinearGradient(0, 0, 500, 0);
+gradient.addColorStop("0", "white");
+gradient.addColorStop("0.25", "yellow");
+gradient.addColorStop("0.5", "blue");
+gradient.addColorStop("0.75", "red");
+gradient.addColorStop("1.0", "white");
+
+const args = {
+  start: { x: 100, y: canvas.height / 2 },
+  end: { x: canvas.width - 100, y: canvas.height / 2 },
+  resolution: 8,
+  mass: 0.88,
+  damping: 0.95,
+  gravity: { x: 0, y: 3000 },
+  //gravity: { x: 0, y: 0 },
+  solverIterations: 500,
+  ropeColour: gradient,
+  ropeSize: 4,
+};
+
+const points = Rope.generate(
+  args.start,
+  args.end,
+  args.resolution,
+  args.mass,
+  args.damping
+);
+
+const rope = new Rope(points, args.solverIterations);
+
+const tick = dt => {
+  rope.update(args.gravity, dt);
+};
+
+const drawRopePoints = (context, points, colour, width) => {
+  if (points.length == 0) return;
+  context.beginPath();
+  context.lineWidth = width;
+  context.strokeStyle = colour;
+  const p = points[0];
+  context.moveTo(p.pos.x, p.pos.y);
+  for (let i = 1; i < points.length; i++) {
+    const p = points[i];
+    context.lineTo(p.pos.x, p.pos.y);
+  }
+  context.stroke();
+};
+
+//render a rope using the verlet points
+const draw = (canvas, context, dt) => {
+  drawRopePoints(context, points, args.ropeColour, args.ropeSize);
+};
+
+const onMouseMove = (x, y) => {
+  const point = rope.getPoint(0);
+  point.pos.x = x;
+  point.pos.y = y;
+};
+
+const app = new App(window, canvas, context, tick, draw, 60);
+
+app.onMouseMoveHandler = onMouseMove;
+app.start();
+</script>
+
+</body>
+</html>

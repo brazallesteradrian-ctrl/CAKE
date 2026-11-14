@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Necklace 3D Viewer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+        }
+      }
+    </script>
+</head>
+
+<body>
+  <main class="viewer-shell">
+    <section class="viewer-panel" aria-label="3D necklace viewer">
+      <canvas id="viewer"></canvas>
+      <div class="status" id="status">Loading necklaces...</div>
+
+      <div class="ui-container is-hidden" id="nav-ui">
+        <button class="arrow-btn" id="btn-prev" aria-label="Previous necklace">&#8592;</button>
+        <span class="model-label" id="model-label">Necklace 1</span>
+        <button class="arrow-btn" id="btn-next" aria-label="Next necklace">&#8594;</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>
