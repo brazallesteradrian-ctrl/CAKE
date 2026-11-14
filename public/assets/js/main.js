@@ -420,7 +420,9 @@ function loadModel(index, animateIn = true, direction = 0) {
     executeLoad(index, animateIn, direction);
   }
 }
+let modelLoadVersion = 0;
 function executeLoad(index, animateIn, direction) {
+  const loadVersion = ++modelLoadVersion;
   const config = modelsConfig[index];
 
   // Clear any existing models completely to avoid duplicates from overlapping async loads
@@ -432,6 +434,7 @@ function executeLoad(index, animateIn, direction) {
   getCachedModelScene(
     config.path,
     (model) => {
+      if (loadVersion !== modelLoadVersion) return;
       const wrapperGroup = new THREE.Group();
       // STEP 1: Measure at scale 1 first (raw size)
       model.scale.setScalar(1);
@@ -552,6 +555,49 @@ function executeLoad(index, animateIn, direction) {
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const selectBtn = document.getElementById("selectBtn");
+const returnBtn = document.getElementById("returnBtn");
+let selectionTimeline = null;
+history.replaceState({ ...history.state, cakeView: 'selection' }, '');
+
+function returnToSelection() {
+  selectionTimeline?.kill();
+  selectionTimeline = null;
+  interactionsEnabled = false;
+  galleryRevealed = false;
+  isTransitioning = false;
+  scrollVelocity = 0;
+  touchLastX = touchLastY = null;
+  if (!modal.classList.contains('hidden')) btnClose.click();
+  returnBtn.hidden = true;
+  birthdayBanner.classList.add('hidden');
+  spinHint.classList.add('hidden');
+  cakeInfo.classList.remove('hidden');
+  frames.forEach(frame => {
+    gsap.killTweensOf([frame.scale, frame.userData, ...frame.userData.materials]);
+    frame.scale.setScalar(0);
+    frame.userData.materials.forEach(material => { material.opacity = 0; });
+  });
+  gsap.killTweensOf([cakeGroup.position, cakeGroup.rotation, cakeGroup.scale, cakePivotGroup.rotation, cakePivotGroup.scale, camera.position]);
+  gsap.killTweensOf([selectBtn, prevBtn, nextBtn]);
+  gsap.set([selectBtn, prevBtn, nextBtn], { opacity: 1, pointerEvents: 'auto' });
+  loadModel(currentModelIndex, false, 0);
+  selectBtn.focus({ preventScroll: true });
+}
+
+returnBtn.addEventListener('click', () => {
+  if (history.state?.cakeView === 'selected') history.back();
+  else returnToSelection();
+});
+window.addEventListener('popstate', event => {
+  returnToSelection();
+  if (event.state?.cakeView === 'selected') {
+    const index = event.state.cakeIndex;
+    if (!Number.isInteger(index) || index < 0 || index >= modelsConfig.length) return;
+    currentModelIndex = index;
+    loadModel(index, false, 0);
+    selectCake(false);
+  }
+});
 prevBtn.onclick = () => {
   if (interactionsEnabled || isTransitioning) return;
   currentModelIndex = (currentModelIndex - 1 + modelsConfig.length) % modelsConfig.length;
@@ -563,8 +609,11 @@ nextBtn.onclick = () => {
   loadModel(currentModelIndex, true, 1);
 };
 // --- Selection Animation (The "Arc" Motion) ---
-selectBtn.onclick = () => {
-  if (isTransitioning) return;
+function selectCake(recordHistory = true) {
+  if (isTransitioning || interactionsEnabled || !currentCakeModel) return;
+  isTransitioning = true;
+  if (recordHistory) history.pushState({ cakeView: 'selected', cakeIndex: currentModelIndex }, '');
+  returnBtn.hidden = false;
   const config = modelsConfig[currentModelIndex];
   const galleryPreset = getGalleryScalePreset();
   const endX = 0;
@@ -588,7 +637,7 @@ selectBtn.onclick = () => {
     ease: "power2.out"
   });
   cakeInfo.classList.add('hidden');
-  const tl = gsap.timeline({
+  const tl = selectionTimeline = gsap.timeline({
     onComplete: () => {
       gsap.killTweensOf(cakeGroup.position);
       gsap.killTweensOf(cakeGroup.scale);
@@ -597,6 +646,8 @@ selectBtn.onclick = () => {
       cakeGroup.scale.set(1, 1, 1);
       cakeGroup.rotation.z = 0;
       interactionsEnabled = true;
+      isTransitioning = false;
+      spinHint.classList.remove('hidden');
       birthdayBanner.classList.remove('hidden');
       galleryRevealed = true;
     }
@@ -663,7 +714,8 @@ selectBtn.onclick = () => {
     duration: 0.8,
     ease: "back.out(1.5)"
   }, 0.4);
-};
+}
+selectBtn.onclick = () => selectCake();
 // --- Memory Card Interaction (Modal) ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
